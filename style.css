@@ -30,6 +30,7 @@ body {
     padding: 12px 16px;
     border-radius: 48px;
     margin-bottom: 1.5rem;
+    backdrop-filter: blur(4px);
 }
 .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
 button {
@@ -42,6 +43,7 @@ button {
     color: white;
     cursor: pointer;
     transition: 0.08s linear;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.3);
 }
 button:active { transform: scale(0.96); }
 .btn-rec { background: #c0392b; }
@@ -51,6 +53,7 @@ button:active { transform: scale(0.96); }
 .btn-metro { background: #2c6e6e; }
 .metro-active { background: #00adb5; box-shadow: 0 0 8px cyan; }
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+
 .edit-card {
     background: #0f1420cc;
     border-radius: 1.5rem;
@@ -70,9 +73,11 @@ input[type=range] { width: 100%; accent-color: #f39c12; }
 }
 .piano-box {
     overflow-x: auto;
+    overflow-y: visible;
     border-radius: 24px;
     background: #080c12;
-    padding-bottom: 15px;
+    padding: 15px 0;
+    position: relative;
 }
 .piano {
     display: flex;
@@ -81,6 +86,13 @@ input[type=range] { width: 100%; accent-color: #f39c12; }
     width: fit-content;
     background: #0a0e14;
     padding: 12px 15px;
+    min-width: 100%;
+}
+/* Teclas brancas contêiner */
+.keys-white {
+    display: flex;
+    position: relative;
+    z-index: 1;
 }
 .key-white {
     width: 70px;
@@ -91,23 +103,36 @@ input[type=range] { width: 100%; accent-color: #f39c12; }
     box-shadow: 0 5px 0 #b0a58e;
     margin: 0 1px;
     cursor: pointer;
-    z-index: 1;
+    transition: 0.04s linear;
+    position: relative;
+    flex-shrink: 0;
+}
+/* Teclas pretas posicionadas absolutamente dentro do .piano */
+.keys-black {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    pointer-events: none; /* para que os eventos passem, mas cada tecla preta terá pointer-events auto */
 }
 .key-black {
+    position: absolute;
     width: 46px;
     height: 138px;
     background: linear-gradient(145deg, #2c2c2c, #0f0f0f);
     border-radius: 0 0 8px 8px;
-    margin-left: -23px;
-    margin-right: -23px;
-    z-index: 2;
     box-shadow: 0 4px 0 #1a1a1a;
     cursor: pointer;
+    transition: 0.04s linear;
+    pointer-events: auto;
+    z-index: 10;
 }
-.key-white.active { background: #ffe1a0; transform: translateY(4px); }
-.key-black.active { background: #6c6c6c; transform: translateY(4px); }
+.key-white.active { background: #ffe1a0; transform: translateY(4px); box-shadow: 0 0px 0 #b0a58e; }
+.key-black.active { background: #6c6c6c; transform: translateY(4px); box-shadow: 0 0px 0 #111; }
 .info-tip { font-size: 0.7rem; text-align: center; margin-top: 12px; color: #ccc; }
+
 @media (max-width: 700px) {
     .key-white { width: 55px; height: 180px; }
-    .key-black { width: 36px; height: 105px; margin-left: -18px; margin-right: -18px; }
-  }
+    .key-black { width: 36px; height: 105px; }
+}
